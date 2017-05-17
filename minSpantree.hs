@@ -15,12 +15,12 @@ instance Ord Edge where
     compare = comparing edgeCost
 
 makeEdgeList f [] = f
-makeEdgeList f (x:y:z:xs) = makeEdgeList (f ++ [MyEdge x y z]) xs
+makeEdgeList f (x:y:z:xs) = makeEdgeList (MyEdge x y z : f) xs
 
 -- create Keys that represent values and that are their parents
-makeSets n = IM.fromList [(key, val) | key <- [1..n], val <- [1..n], key == val]
+makeSets n = IM.fromAscList $ zip [1..n] [1..n]
 -- replace the key in the set with a new value
-replace key new sets = IM.adjust (\ a ->  new) key sets
+replace key new sets = IM.insert key new sets
 -- replace the Parent
 replaceParent u v set = replace (getParent u set) (getParent v set) set
 
